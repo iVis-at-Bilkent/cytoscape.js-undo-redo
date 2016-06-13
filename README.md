@@ -5,7 +5,7 @@ cytoscape.js-undo-redo
 ## Description
  This extension represents an interface to control actions on Cytoscape.js graph and also provides 
  built-in functionalities for common cytoscape.js operations like dragging nodes, adding/removing new node et al.
-
+ 
 
 
 ## API
@@ -19,16 +19,16 @@ cytoscape.js-undo-redo
 
 
 `ur.action( actionName, actionFunction, undoFunction)`
-Register action with its undo function & action name.
+Register action with its undo function & action name. actionFunction's return value will be used to call undoFunction by argument and vice versa. This function is chainable: `ur.action(...).action(...)`
 
 `ur.do(actionName, args)`
 Calls registered function with action name actionName via actionFunction(args)
 
 `ur.undo()`
-Undo last action
+Undo last action.
 
 `ur.redo()`
-Redo last action
+Redo last action.
 
 `cy.on("undo", function(actionName, args){} )`
 Calls registered function with action name actionName via actionFunction(args)
@@ -110,6 +110,25 @@ Gets actions (with their args) in redo stack
         }
  ```
 
+
+
+## Example
+ ```javascript
+    function deleteEles(eles){
+        return eles.remove();
+    }
+    function restoreEles(eles){
+        return eles.restore();
+    }
+    ur.action("deleteEles", deleteEles, restoreEles); // register
+    
+    var selecteds = cy.$(":selected");
+    ur.do("deleteEles", selecteds); // 
+    
+    ur.undo().redo();
+ ```
+  * Note that default `remove` default action above has the same functionality and also supports string selectors like `#spec`.
+ 
 
 ## Dependencies
 
