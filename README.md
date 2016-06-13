@@ -89,6 +89,8 @@ Gets actions (with their args) in redo stack
  
  `.do("remove", eles/selector)` http://js.cytoscape.org/#cy.remove
  
+ `.do("layout", options)` http://js.cytoscape.org/#core/layout
+ 
  * Following actions take argument(s) instead of extending
  
  `.do("restore", eles/selector)` http://js.cytoscape.org/#eles.restore

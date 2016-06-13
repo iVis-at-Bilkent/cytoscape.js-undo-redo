@@ -273,9 +273,6 @@
 
 
         function returnToPositionsAndSizes(nodesData) {
-            if (nodesData.firstTime)
-                return nodesData;
-
             var currentPositionsAndSizes = {};
             cy.nodes().positions(function (i, ele) {
                 currentPositionsAndSizes[ele.id()] = {
@@ -413,13 +410,18 @@
                         return result;
                     }
                 },
-                "saveState": {
-                    _do: function () {
-                        var nodesData = getNodesData();
-                        nodesData.firstTime = true;
-                        return returnToPositionsAndSizes(nodesData);
+                "layout": {
+                    _do: function (options) {
+                        if(options.firstTime){
+                            var nodesData = getNodesData();
+                            cy.layout(options);
+                            return nodesData;
+                        } else
+                            return returnToPositionsAndSizes(options);
                     },
-                    _undo: returnToPositionsAndSizes
+                    _undo: function (nodesData) {
+                        return returnToPositionsAndSizes(nodesData);
+                    }
                 }
             };
         }
