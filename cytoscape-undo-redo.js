@@ -201,7 +201,6 @@
             isDragDropSet = true;
             cy.on("mousedown", "node", function () {
                 if (undoable) {
-                    var self = this;
                     lastMouseDownNodeInfo = {};
                     lastMouseDownNodeInfo.lastMouseDownPosition = {
                         x: this.position("x"),
@@ -333,7 +332,7 @@
                 },
                 "select": {
                     _do: function (_eles) {
-                        return getEles(_eles).select()
+                        return getEles(_eles).select();
                     },
                     _undo: function (_eles) {
                         return getEles(_eles).unselect();
@@ -341,7 +340,7 @@
                 },
                 "unselect": {
                     _do: function (_eles) {
-                        return getEles(_eles).unselect()
+                        return getEles(_eles).unselect();
                     },
                     _undo: function (_eles) {
                         return getEles(_eles).select();
@@ -358,7 +357,7 @@
                             newNodes: nodes.move(args.location),
                             oldEdges: edges,
                             newEdges: edges.move(args.location)
-                        }
+                        };
                     },
                     _undo: function (eles) {
                         var newEles = cy.collection();
@@ -387,7 +386,7 @@
                         return {
                             eles: newEles,
                             location: location
-                        }
+                        };
                     }
                 },
                 "drag": {
