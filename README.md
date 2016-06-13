@@ -25,10 +25,10 @@ Register action with its undo function & action name. actionFunction's return va
 Calls registered function with action name actionName via actionFunction(args)
 
 `ur.undo()`
-Undo last action.
+Undo last action. Returns arguments that are passed to redo.
 
 `ur.redo()`
-Redo last action.
+Redo last action. Returns arguments that are passed to undo.
 
 `cy.on("undo", function(actionName, args){} )`
 Calls registered function with action name actionName via actionFunction(args)
@@ -73,7 +73,7 @@ Gets actions (with their args) in redo stack
             afterRedo: function () { // callback after redo is triggered.
 
             },
-            ready: function () {
+            ready: function () { // callback when undo-redo is ready
 
             }
         }
@@ -125,7 +125,8 @@ Gets actions (with their args) in redo stack
     var selecteds = cy.$(":selected");
     ur.do("deleteEles", selecteds); // 
     
-    ur.undo().redo();
+    ur.undo();
+    ur.redo();
  ```
   * Note that default `remove` default action above has the same functionality and also supports string selectors like `#spec`.
  
