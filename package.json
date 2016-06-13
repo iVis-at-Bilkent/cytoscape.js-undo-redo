@@ -1,6 +1,6 @@
 {
   "name": "cytoscape.js-undo-redo",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Manages undo&#x2F;redo actions",
   "main": "cytoscape.js-undo-redo.js",
   "spm": {
