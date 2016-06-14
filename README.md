@@ -5,9 +5,7 @@ cytoscape.js-undo-redo
 ## Description
  This extension represents an interface to control actions on Cytoscape.js graph and also provides 
  built-in functionalities for common cytoscape.js operations like dragging nodes, adding/removing new node et al.
-
-
-
+ 
 ## API
 
 ```javascript
@@ -19,16 +17,16 @@ cytoscape.js-undo-redo
 
 
 `ur.action( actionName, actionFunction, undoFunction)`
-Register action with its undo function & action name.
+Register action with its undo function & action name. actionFunction's return value will be used to call undoFunction by argument and vice versa. This function is chainable: `ur.action(...).action(...)`
 
 `ur.do(actionName, args)`
 Calls registered function with action name actionName via actionFunction(args)
 
 `ur.undo()`
-Undo last action
+Undo last action. Returns arguments that are passed to redo.
 
 `ur.redo()`
-Redo last action
+Redo last action. Returns arguments that are passed to undo.
 
 `cy.on("undo", function(actionName, args){} )`
 Calls registered function with action name actionName via actionFunction(args)
@@ -73,7 +71,7 @@ Gets actions (with their args) in redo stack
             afterRedo: function () { // callback after redo is triggered.
 
             },
-            ready: function () {
+            ready: function () { // callback when undo-redo is ready
 
             }
         }
@@ -110,6 +108,26 @@ Gets actions (with their args) in redo stack
         }
  ```
 
+
+
+## Example
+ ```javascript
+    function deleteEles(eles){
+        return eles.remove();
+    }
+    function restoreEles(eles){
+        return eles.restore();
+    }
+    ur.action("deleteEles", deleteEles, restoreEles); // register
+    
+    var selecteds = cy.$(":selected");
+    ur.do("deleteEles", selecteds); // 
+    
+    ur.undo();
+    ur.redo();
+ ```
+  * Note that default `remove` default action above has the same functionality and also supports string selectors like `#spec`.
+ 
 
 ## Dependencies
 
@@ -152,3 +170,7 @@ This project is set up to automatically be published to npm and bower.  To publi
 1. Set the version number environment variable: `export VERSION=1.2.3`
 1. Publish: `gulp publish`
 1. If publishing to bower for the first time, you'll need to run `bower register cytoscape.js-undo-redo https://github.com/iVis-at-Bilkent/cytoscape.js-undo-redo.git`
+
+## Team
+
+  * [Selim Firat Yilmaz](https://github.com/mrsfy), [Metin Can Siper](https://github.com/metincansiper), [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
