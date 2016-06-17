@@ -59,6 +59,7 @@ Gets actions (with their args) in redo stack
                 ctrl_y: true, // redo
                 ctrl_shift_z: false // redo
             },
+            defaultActions: true, // default actions are enabled/disabled
             beforeUndo: function () { // callback before undo is triggered.
 
             },
