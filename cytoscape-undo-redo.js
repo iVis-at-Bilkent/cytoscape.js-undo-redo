@@ -63,7 +63,7 @@
                     setKeyboardShortcuts(false, false, false);
 
             }
-            if (!isInitialized && options.defaultActions) {
+            if (!isInitialized && (!options || options.defaultActions)) {
                 var defActions = defaultActions();
                 for (var key in defActions)
                     actions[key] = defActions[key];
