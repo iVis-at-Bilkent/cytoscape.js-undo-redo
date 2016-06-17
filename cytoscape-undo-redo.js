@@ -139,8 +139,6 @@
                 firstTime: true
             });
 
-            this.redo();
-
             return this.redo();
         };
 
