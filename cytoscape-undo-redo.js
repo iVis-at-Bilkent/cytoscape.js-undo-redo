@@ -37,7 +37,8 @@
                 },
                 ready: function () {
 
-                }
+                },
+                defaultActions: true
             }
         };
 
@@ -45,17 +46,6 @@
         // design implementation
         cytoscape("core", "undoRedo", function (options) {
             cy = this;
-            if (!isInitialized) {
-                var defActions = defaultActions();
-                for (var key in defActions)
-                    actions[key] = defActions[key];
-
-
-                setDragUndo(_instance.options.undoableDrag);
-
-                isInitialized = true;
-            }
-
             if (options) {
                 for (var key in options)
                     if (_instance.options.hasOwnProperty(key))
@@ -73,6 +63,17 @@
                     setKeyboardShortcuts(false, false, false);
 
             }
+            if (!isInitialized && options.defaultActions) {
+                var defActions = defaultActions();
+                for (var key in defActions)
+                    actions[key] = defActions[key];
+
+
+                setDragUndo(_instance.options.undoableDrag);
+
+                isInitialized = true;
+            }
+
             _instance.options.ready();
             return _instance;
 
