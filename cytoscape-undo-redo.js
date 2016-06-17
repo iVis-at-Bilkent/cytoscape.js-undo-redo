@@ -111,7 +111,8 @@
                 var action = redoStack.pop();
 
                 cy.trigger(action.firstTime ? "do" : "redo", [action.name, action.args]);
-
+                if (!action.args)
+                  action.args = {};
                 action.args.firstTime = action.firstTime ? true : false;
 
                 var res = actions[action.name]._do(action.args);
