@@ -1,10 +1,10 @@
 {
-  "name": "cytoscape.js-undo-redo",
+  "name": "cytoscape-undo-redo",
   "version": "1.0.0",
-  "description": "Manages undo&#x2F;redo actions",
-  "main": "cytoscape.js-undo-redo.js",
+  "description": "Manages undo-redo actions",
+  "main": "cytoscape-undo-redo.js",
   "spm": {
-    "main": "cytoscape.js-undo-redo.js"
+    "main": "cytoscape-undo-redo.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
