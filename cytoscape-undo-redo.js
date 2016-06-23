@@ -420,10 +420,13 @@
                     }
                 },
                 "layout": {
-                    _do: function (options) {
-                        if(options.firstTime){
+                    _do: function (args) {
+                        if (args.firstTime){
                             var nodesData = getNodesData();
-                            cy.layout(options);
+                            if(args.eles)
+                                getEles(args.eles).layout(args.options);
+                            else
+                              cy.layout(args.options);
                             return nodesData;
                         } else
                             return returnToPositionsAndSizes(options);

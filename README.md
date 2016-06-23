@@ -96,7 +96,14 @@ Gets actions (with their args) in redo stack
  
  `.do("remove", eles/selector)` http://js.cytoscape.org/#cy.remove
  
- `.do("layout", options)` http://js.cytoscape.org/#core/layout
+ `.do("layout", args)` http://js.cytoscape.org/#core/layout
+ 
+ ```javascript
+    var args = {
+        options: {}, // layout options
+        eles: null // if not null eles.layout will be called.
+        }
+ ```
  
  * Following actions take argument(s) instead of extending
  
@@ -108,11 +115,11 @@ Gets actions (with their args) in redo stack
  
  `.do("unselect", eles/selector)` http://js.cytoscape.org/#eles.unselect
  
- `.do("move", arg)` http://js.cytoscape.org/#eles.move 
+ `.do("move", args)` http://js.cytoscape.org/#eles.move 
  
  ```javascript
-    var arg = {
-        eles: ... // eles/selector
+    var args = {
+        eles: ..., // eles/selector
         location: ... // as is in docs
         }
  ```
