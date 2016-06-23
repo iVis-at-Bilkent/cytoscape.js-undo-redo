@@ -56,15 +56,15 @@
                         actions[key] = options.actions[key];
 
 
+
+            }
+            
+            if (!isInitialized && (!_instance.options || _instance.options.defaultActions)) {
                 if (_instance.options.keyboardShortcuts) {
                     var sh = _instance.options.keyboardShortcuts;
                     setKeyboardShortcuts(sh.ctrl_z, sh.ctrl_y, sh.ctrl_shift_z);
                 } else
                     setKeyboardShortcuts(false, false, false);
-
-            }
-            
-            if (!isInitialized && (!_instance.options || _instance.options.defaultActions)) {
                 var defActions = defaultActions();
                 for (var key in defActions)
                     actions[key] = defActions[key];
@@ -124,7 +124,7 @@
                 cy.trigger(action.firstTime ? "afterDo" : "afterRedo", [action.name, action.args]);
                 return res;
             } else if (_instance.options.isDebug) {
-                console.log("Redoing cannot be done because undo stack is empty!");
+                console.log("Redoing cannot be done because redo stack is empty!");
             }
 
         };
