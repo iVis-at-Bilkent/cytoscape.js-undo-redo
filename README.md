@@ -19,8 +19,11 @@ cytoscape.js-undo-redo
 `ur.action( actionName, actionFunction, undoFunction)`
 Register action with its undo function & action name. actionFunction's return value will be used to call undoFunction by argument and vice versa. This function is chainable: `ur.action(...).action(...)`
 
+
 `ur.do(actionName, args)`
 Calls registered function with action name actionName via actionFunction(args)
+* `args` only takes an array or object, not a Number and String. The reason behind is on first call of do(action) function 
+takes a parameter with property `args.firstTime = true`. After first call, it's set to false.
 
 `ur.undo()`
 Undo last action. Returns arguments that are passed to redo.
