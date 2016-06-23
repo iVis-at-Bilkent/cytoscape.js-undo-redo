@@ -233,8 +233,7 @@
                             nodes = cy.nodes(":visible").filter(":selected");
                         }
                         else {
-                            nodes = [];
-                            nodes.push(node);
+                            nodes = cy.collection([node]);
                         }
 
                         var param = {
@@ -248,10 +247,29 @@
                 }
             });
         }
-
-        function moveNodes(positionDiff, nodes) {
+        function getTopMostNodes(nodes) {
+            var nodesMap = {};
             for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
+                nodesMap[nodes[i].id()] = true;
+            }
+            var roots = nodes.filter(function (i, ele) {
+                var parent = ele.parent()[0];
+                while(parent != null){
+                    if(nodesMap[parent.id()]){
+                        return false;
+                    }
+                    parent = parent.parent()[0];
+                }
+                return true;
+            });
+
+            return roots;
+        }
+
+        function moveNodes(positionDiff, nodes, notCalcTopMostNodes) {
+            var topMostNodes = notCalcTopMostNodes?nodes:getTopMostNodes(nodes);
+            for (var i = 0; i < topMostNodes.length; i++) {
+                var node = topMostNodes[i];
                 var oldX = node.position("x");
                 var oldY = node.position("y");
                 node.position({
@@ -259,7 +277,7 @@
                     y: oldY + positionDiff.y
                 });
                 var children = node.children();
-                moveNodes(positionDiff, children);
+                moveNodes(positionDiff, children, true);
             }
         }
 
