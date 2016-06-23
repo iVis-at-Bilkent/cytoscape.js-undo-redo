@@ -83,10 +83,9 @@
         // Undo last action
         _instance.undo = function () {
             if (!this.isUndoStackEmpty()) {
-                _instance.options.beforeUndo();
 
                 var action = undoStack.pop();
-                cy.trigger("undo", [action.name, action.args]);
+                cy.trigger("beforeUndo", [action.name, action.args]);
 
                 var res = actions[action.name]._undo(action.args);
 
@@ -95,8 +94,7 @@
                     args: res
                 });
 
-                _instance.options.afterUndo();
-
+                cy.trigger("afterUndo", [action.name, action.args]);
                 return res;
             } else if (_instance.options.isDebug) {
                 console.log("Undoing cannot be done because undo stack is empty!");
@@ -107,11 +105,11 @@
         _instance.redo = function () {
 
             if (!this.isRedoStackEmpty()) {
-                _instance.options.beforeRedo();
-
                 var action = redoStack.pop();
 
-                cy.trigger(action.firstTime ? "do" : "redo", [action.name, action.args]);
+                cy.trigger(action.firstTime ? "beforeDo" : "beforeRedo", [action.name, action.args]);
+
+
                 if (!action.args)
                   action.args = {};
                 action.args.firstTime = action.firstTime ? true : false;
@@ -123,8 +121,7 @@
                     args: res
                 });
 
-                _instance.options.afterRedo();
-
+                cy.trigger(action.firstTime ? "afterDo" : "afterRedo", [action.name, action.args]);
                 return res;
             } else if (_instance.options.isDebug) {
                 console.log("Redoing cannot be done because undo stack is empty!");

@@ -85,15 +85,15 @@
                     isDebug: true
                 });
 
-                cy.on("undo", function (e, name) {
+                cy.on("afterUndo", function (e, name) {
                     document.getElementById("undos").innerHTML += "<span style='color: darkred; font-weight: bold'>Undo: </span> " + name  +"</br>";
                 });
 
-                cy.on("redo", function (e, name) {
+                cy.on("afterRedo", function (e, name) {
                     document.getElementById("undos").innerHTML += "<span style='color: darkblue; font-weight: bold'>Redo: </span>" + name  +"</br>";
                 });
 
-                cy.on("do", function (e, name) {
+                cy.on("afterDo", function (e, name) {
                     document.getElementById("undos").innerHTML += "<span style='color: darkmagenta; font-weight: bold'>Do: </span>" + name  +"</br>";
                 });
 

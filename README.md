@@ -63,18 +63,6 @@ Gets actions (with their args) in redo stack
                 ctrl_shift_z: false // redo
             },
             defaultActions: true, // default actions are enabled/disabled
-            beforeUndo: function () { // callback before undo is triggered.
-
-            },
-            afterUndo: function () { // callback after undo is triggered.
-
-            },
-            beforeRedo: function () { // callback before redo is triggered.
-
-            },
-            afterRedo: function () { // callback after redo is triggered.
-
-            },
             ready: function () { // callback when undo-redo is ready
 
             }
@@ -82,6 +70,23 @@ Gets actions (with their args) in redo stack
         
        var ur = cy.undoRedo(options); // Can also be set whenever wanted.
 ```
+
+
+## Events
+
+ `.on("beforeUndo", function(event, actionName, args){ })` 
+ 
+ `.on("afterUndo", function(event, actionName, args){ })` 
+ 
+ `.on("beforeRedo", function(event, actionName, args){ })` 
+ 
+ `.on("afterRedo", function(event, actionName, args){ })` 
+ 
+ `.on("beforeDo", function(event, actionName, args){ })` 
+ 
+ `.on("afterDo", function(event, actionName, args){ })` 
+ 
+
 
 ## Default Actions (Undoable/Redoable)
  * Default actions can be run by the same way like `ur.do("remove", "#spec")`
