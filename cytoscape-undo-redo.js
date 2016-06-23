@@ -325,12 +325,6 @@
                     _do: restoreEles,
                     _undo: cy.remove
                 },
-                "clone": {
-                    _do: function (_eles) {
-                        return _eles.firstTime ? getEles(_eles).clone() : restoreEles(_eles);
-                    },
-                    _undo: cy.remove
-                },
                 "select": {
                     _do: function (_eles) {
                         return getEles(_eles).select();
