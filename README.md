@@ -16,6 +16,9 @@ cytoscape.js-undo-redo
 ```
 
 
+`cy.undoRedo(options, dontInit)`
+Sets options. Also, dontInit can be left blank and is to be used in extensions to set default actions of an extension.
+
 `ur.action( actionName, actionFunction, undoFunction)`
 Register action with its undo function & action name. actionFunction's return value will be used to call undoFunction by argument and vice versa. This function is chainable: `ur.action(...).action(...)`
 
@@ -62,7 +65,6 @@ Gets actions (with their args) in redo stack
                 ctrl_y: true, // redo
                 ctrl_shift_z: false // redo
             },
-            defaultActions: true, // default actions are enabled/disabled
             ready: function () { // callback when undo-redo is ready
 
             }
