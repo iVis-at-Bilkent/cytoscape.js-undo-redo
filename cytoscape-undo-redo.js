@@ -42,10 +42,20 @@
         };
         
 
-        var isInitialized = false;
         // design implementation
         cytoscape("core", "undoRedo", function (options, dontInit) {
             cy = this;
+
+
+
+            function getScratch() {
+                if (!cy.scratch("_undoRedo")) {
+                    cy.scratch("_undoRedo", { });
+
+                }
+                return cy.scratch("_undoRedo")
+            }
+
             if (options) {
                 for (var key in options)
                     if (_instance.options.hasOwnProperty(key))
@@ -58,10 +68,12 @@
                 
             }
             
-            if (!isInitialized && !dontInit) {
-                if (_instance.options.keyboardShortcuts) {
+            if (!getScratch().isInitialized && !dontInit) {
+                if (_instance.options.keyboardShortcuts && !getScratch().isKeyboardShortcutsSet) {
                     var sh = _instance.options.keyboardShortcuts;
                     setKeyboardShortcuts(sh.ctrl_z, sh.ctrl_y, sh.ctrl_shift_z);
+                    getScratch().isKeyboardShortcutsSet = true;
+
                 } else
                     setKeyboardShortcuts(false, false, false);
                 var defActions = defaultActions();
@@ -70,8 +82,7 @@
 
 
                 setDragUndo(_instance.options.undoableDrag);
-
-                isInitialized = true;
+                getScratch().isInitialized = true
             }
 
             _instance.options.ready();
