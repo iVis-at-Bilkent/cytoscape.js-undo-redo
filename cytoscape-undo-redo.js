@@ -40,6 +40,7 @@
                 }
             }
         };
+        
 
         var isInitialized = false;
         // design implementation
@@ -196,7 +197,7 @@
 
         function setDragUndo(undoable) {
             isDragDropSet = true;
-            cy.on("mousedown", "node", function () {
+            cy.on("grab", "node", function () {
                 if (undoable) {
                     lastMouseDownNodeInfo = {};
                     lastMouseDownNodeInfo.lastMouseDownPosition = {
@@ -206,7 +207,7 @@
                     lastMouseDownNodeInfo.node = this;
                 }
             });
-            cy.on("mouseup", "node", function () {
+            cy.on("free", "node", function () {
                 if (undoable) {
                     if (lastMouseDownNodeInfo == null) {
                         return;
