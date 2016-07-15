@@ -53,7 +53,7 @@
                     cy.scratch("_undoRedo", { });
 
                 }
-                return cy.scratch("_undoRedo")
+                return cy.scratch("_undoRedo");
             }
 
             if (options) {
@@ -82,7 +82,7 @@
 
 
                 setDragUndo(_instance.options.undoableDrag);
-                getScratch().isInitialized = true
+                getScratch().isInitialized = true;
             }
 
             _instance.options.ready();
