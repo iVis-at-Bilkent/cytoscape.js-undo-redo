@@ -181,7 +181,7 @@
         // Set keyboard shortcuts according to options
         function setKeyboardShortcuts(ctrl_z, ctrl_y, ctrl_shift_z) {
             document.addEventListener("keydown", function (e) {
-                if (e.ctrlKey)
+                if (e.ctrlKey && e.target.nodeName === 'BODY')
                     if (ctrl_z && e.which === 90)
                         if (ctrl_shift_z && e.shiftKey)
                             _instance.redo();
