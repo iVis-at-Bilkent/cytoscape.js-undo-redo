@@ -191,7 +191,7 @@
 
         // Set keyboard shortcuts according to options
         function setKeyboardShortcuts(ctrl_z, ctrl_y, ctrl_shift_z) {
-            document.addEventListener("keydown", function (e) {
+            var kFunc = function (e) {
                 if (e.ctrlKey && e.target.nodeName === 'BODY')
                     if (ctrl_z && e.which === 90)
                         if (ctrl_shift_z && e.shiftKey)
@@ -200,7 +200,9 @@
                             _instance.undo();
                     else if (ctrl_y && e.which === 89)
                         _instance.redo();
-            });
+            };
+            document.removeEventListener("keydown", kFunc);
+            document.addEventListener("keydown", kFunc);
         }
 
         var lastMouseDownNodeInfo = null;
