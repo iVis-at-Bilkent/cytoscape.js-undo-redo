@@ -60,11 +60,6 @@ Gets actions (with their args) in redo stack
             isDebug: false, // Debug mode for console messages
             actions: {},// actions to be added
             undoableDrag: true, // Whether dragging nodes are undoable
-            keyboardShortcuts: {
-                ctrl_z: true, // undo
-                ctrl_y: true, // redo
-                ctrl_shift_z: false // redo
-            },
             ready: function () { // callback when undo-redo is ready
 
             }
