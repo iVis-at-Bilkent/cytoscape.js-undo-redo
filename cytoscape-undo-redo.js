@@ -18,11 +18,6 @@
                 isDebug: false, // Debug mode for console messages
                 actions: {},// actions to be added
                 undoableDrag: true, // Whether dragging nodes are undoable
-                keyboardShortcuts: {
-                    ctrl_z: true, // undo
-                    ctrl_y: true, // redo
-                    ctrl_shift_z: false // redo
-                },
                 beforeUndo: function () { // callback before undo is triggered.
 
                 },
@@ -69,13 +64,7 @@
             }
             
             if (!getScratch().isInitialized && !dontInit) {
-                if (_instance.options.keyboardShortcuts && !getScratch().isKeyboardShortcutsSet) {
-                    var sh = _instance.options.keyboardShortcuts;
-                    setKeyboardShortcuts(sh.ctrl_z, sh.ctrl_y, sh.ctrl_shift_z);
-                    getScratch().isKeyboardShortcutsSet = true;
 
-                } else
-                    setKeyboardShortcuts(false, false, false);
                 var defActions = defaultActions();
                 for (var key in defActions)
                     actions[key] = defActions[key];
@@ -189,21 +178,6 @@
             return redoStack;
         };
 
-        // Set keyboard shortcuts according to options
-        function setKeyboardShortcuts(ctrl_z, ctrl_y, ctrl_shift_z) {
-            var kFunc = function (e) {
-                if (e.ctrlKey && e.target.nodeName === 'BODY')
-                    if (ctrl_z && e.which === 90)
-                        if (ctrl_shift_z && e.shiftKey)
-                            _instance.redo();
-                        else
-                            _instance.undo();
-                    else if (ctrl_y && e.which === 89)
-                        _instance.redo();
-            };
-            document.removeEventListener("keydown", kFunc);
-            document.addEventListener("keydown", kFunc);
-        }
 
         var lastMouseDownNodeInfo = null;
         var isDragDropSet = false;

@@ -120,9 +120,15 @@
 				document.addEventListener("keydown", function (e) {
 					if(e.which === 46) {
                         var selecteds = cy.$(":selected");
-                        if(selecteds.length > 0)
+                        if (selecteds.length > 0)
                             ur.do("remove", selecteds);
-					}
+                    }
+                    else if (e.ctrlKey && e.target.nodeName === 'BODY')
+                        if (e.which === 90)
+                            ur.undo();
+                        else if (e.which === 89)
+                            ur.redo();
+
 				});
 
 
