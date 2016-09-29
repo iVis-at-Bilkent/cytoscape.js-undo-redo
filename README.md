@@ -57,7 +57,7 @@ Gets actions (with their args) in redo stack
       var options = {
             isDebug: false, // Debug mode for console messages
             actions: {},// actions to be added
-            undoableDrag: true, // Whether dragging nodes are undoable
+            undoableDrag: true, // Whether dragging nodes are undoable can be a function as well
             ready: function () { // callback when undo-redo is ready
 
             }

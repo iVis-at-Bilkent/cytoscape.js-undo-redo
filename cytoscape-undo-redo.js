@@ -17,7 +17,7 @@
             options: {
                 isDebug: false, // Debug mode for console messages
                 actions: {},// actions to be added
-                undoableDrag: true, // Whether dragging nodes are undoable
+                undoableDrag: true, // Whether dragging nodes are undoable can be a function as well
                 beforeUndo: function () { // callback before undo is triggered.
 
                 },
@@ -185,7 +185,7 @@
         function setDragUndo(undoable) {
             isDragDropSet = true;
             cy.on("grab", "node", function () {
-                if (undoable) {
+                if (typeof undoable === 'function' ? undoable.call(this) : undoable) {
                     lastMouseDownNodeInfo = {};
                     lastMouseDownNodeInfo.lastMouseDownPosition = {
                         x: this.position("x"),
@@ -195,7 +195,7 @@
                 }
             });
             cy.on("free", "node", function () {
-                if (undoable) {
+                if (typeof undoable === 'function' ? undoable.call(this) : undoable) {
                     if (lastMouseDownNodeInfo == null) {
                         return;
                     }
