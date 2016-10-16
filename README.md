@@ -158,7 +158,7 @@ Download the library:
 CommonJS:
 ```js
 var cytoscape = require('cytoscape');
-var undoRedo = require('cytoscape.js-undo-redo');
+var undoRedo = require('cytoscape-undo-redo');
 
 undoRedo( cytoscape ); // register extension
 ```
