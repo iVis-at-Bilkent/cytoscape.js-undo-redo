@@ -309,6 +309,68 @@
             }
             return nodesData;
         }
+        
+        function changeParent(param) {
+          var result = {
+          };
+
+          var nodes = param.nodes;
+
+          var transferedNodeMap = {};
+
+          // Map the nodes included in the original node list
+          for (var i = 0; i < param.nodes.length; i++) {
+            var node = param.nodes[i];
+            transferedNodeMap[node.id()] = true;
+          }
+
+          if (!param.firstTime) {
+            // If it is not the first time get the updated nodes
+            nodes = cy.nodes().filter(function (i, ele) {
+              return (transferedNodeMap[ele.id()]);
+            });
+          }
+
+          result.posDiffX = -1 * param.posDiffX;
+          result.posDiffY = -1 * param.posDiffY;
+
+          result.parentData = {}; // For undo / redo cases it keeps the previous parent info per node
+
+          // Fill parent data
+          for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            result.parentData[node.id()] = node.data('parent');
+          }
+
+          var newParentId;
+
+          if (param.firstTime) {
+            newParentId = param.parentData == undefined ? null : param.parentData;
+            nodes.move({"parent": newParentId});
+          }
+          else {
+            for (var i = 0; i < nodes.length; i++) {
+              var node = nodes[i];
+
+              newParentId = param.parentData[node.id()] == undefined ? null : param.parentData[node.id()];
+              node.move({"parent": newParentId});
+            }
+          }
+
+          var posDiff = {
+            x: param.posDiffX,
+            y: param.posDiffY
+          };
+
+          // We should get the updated nodes to move them
+          result.nodes = cy.nodes().filter(function (i, ele) {
+            return (transferedNodeMap[ele.id()]);
+          });
+
+          moveNodes(posDiff, result.nodes);
+
+          return result;
+        }
 
         // Default actions
         function defaultActions() {
@@ -420,6 +482,14 @@
                     },
                     _undo: function (nodesData) {
                         return returnToPositionsAndSizes(nodesData);
+                    }
+                },
+                "changeParent": {
+                    _do: function (args) {
+                        return changeParent(args);
+                    },
+                    _undo: function (args) {
+                        return changeParent(args);
                     }
                 }
             };
