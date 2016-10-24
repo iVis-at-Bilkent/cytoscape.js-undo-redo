@@ -35,7 +35,7 @@
                 }
             }
         };
-        
+
 
         // design implementation
         cytoscape("core", "undoRedo", function (options, dontInit) {
@@ -60,9 +60,9 @@
                     for (var key in options.actions)
                         actions[key] = options.actions[key];
 
-                
+
             }
-            
+
             if (!getScratch().isInitialized && !dontInit) {
 
                 var defActions = defaultActions();
@@ -78,8 +78,15 @@
             return _instance;
 
         });
-        
+
         _instance.getPaddingsMap = getPaddingsMap;
+
+        //resets undo and redo stacks
+        _instance.reset = function()
+        {
+            undoStack = [];
+            redoStack = [];
+        }
 
         // Undo last action
         _instance.undo = function () {
@@ -87,19 +94,19 @@
 
                 var action = undoStack.pop();
                 cy.trigger("beforeUndo", [action.name, action.args]);
-                
+
                 // The next paddings map to return back
                 var nextPaddingsToReturn = getPaddingsMap();
 
                 var res = actions[action.name]._undo(action.args);
-                
+
                 // Complete the resulting parameters and return to the given paddings
                 res.paddingsToReturn = nextPaddingsToReturn;
 
                 // Return the paddings given by the param
                 var paddingsToReturn = action.args.paddingsToReturn;
                 returnToPaddings(paddingsToReturn);
-                
+
                 redoStack.push({
                     name: action.name,
                     args: res
@@ -122,7 +129,7 @@
 
                 // The next paddings map to return back
                 var nextPaddingsToReturn;
-                        
+
                 // If this is a do action (That is 'firstTime' is truthy) and paddingsToReturn is not specified by the user
                 // set 'nextPaddingsToReturn'
                 if ( action.firstTime && !action.args.paddingsToReturn ) {
@@ -131,7 +138,7 @@
                 else {
                     nextPaddingsToReturn = action.args.paddingsToReturn;
                 }
-                
+
                 if (!action.args)
                   action.args = {};
                 action.args.firstTime = action.firstTime ? true : false;
@@ -143,7 +150,7 @@
                     var paddingsToReturn = action.args.paddingsToReturn;
                     returnToPaddings(paddingsToReturn);
                 }
-                
+
                 // introduce the next paddings to return
                 res.paddingsToReturn = nextPaddingsToReturn;
 
@@ -265,12 +272,12 @@
                 }
             });
         }
-        
+
         // Map the paddings of the nodes and return that map
         function getPaddingsMap() {
           var paddingsMap = {};
           var compounds = cy.nodes(':parent');
-          
+
           compounds.each(function(i, ele){
             var paddings = {
               top: ele.css('padding-top'),
@@ -281,16 +288,16 @@
 
             paddingsMap[ele.id()] = paddings;
           });
-          
+
           return paddingsMap;
         }
-        
+
         // Return to the paddings in the parameter
         function returnToPaddings(paddingsMap) {
           var compounds = cy.nodes(':parent');
-          
+
           cy.startBatch();
-          
+
           compounds.each(function(i, ele){
             var paddings = paddingsMap[ele.id()];
             ele.css('padding-left', paddings.left);
@@ -298,10 +305,10 @@
             ele.css('padding-top', paddings.top);
             ele.css('padding-bottom', paddings.bottom);
           });
-          
+
           cy.endBatch();
         }
-        
+
         function getTopMostNodes(nodes) {
             var nodesMap = {};
             for (var i = 0; i < nodes.length; i++) {
@@ -380,7 +387,7 @@
             }
             return nodesData;
         }
-        
+
         function changeParent(param) {
           var result = {
           };
