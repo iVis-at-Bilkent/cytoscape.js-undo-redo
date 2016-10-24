@@ -126,7 +126,10 @@
                 // If this is a do action (That is 'firstTime' is truthy) and paddingsToReturn is not specified by the user
                 // set 'nextPaddingsToReturn'
                 if ( action.firstTime && !action.args.paddingsToReturn ) {
-                    nextPaddingsToReturn  = getPaddingsMap();
+                    nextPaddingsToReturn = getPaddingsMap();
+                }
+                else {
+                    nextPaddingsToReturn = action.args.paddingsToReturn;
                 }
                 
                 if (!action.args)
@@ -141,10 +144,8 @@
                     returnToPaddings(paddingsToReturn);
                 }
                 
-                // If next paddings to return is just set introduce it to 'res'
-                if ( nextPaddingsToReturn ) {
-                    res.paddingsToReturn = nextPaddingsToReturn;
-                }
+                // introduce the next paddings to return
+                res.paddingsToReturn = nextPaddingsToReturn;
 
                 undoStack.push({
                     name: action.name,
@@ -222,6 +223,7 @@
                         x: this.position("x"),
                         y: this.position("y")
                     };
+                    lastMouseDownNodeInfo.lastPaddingsMap = getPaddingsMap();
                     lastMouseDownNodeInfo.node = this;
                 }
             });
@@ -253,7 +255,8 @@
 
                         var param = {
                             positionDiff: positionDiff,
-                            nodes: nodes, move: false
+                            nodes: nodes, move: false,
+                            paddingsToReturn: lastMouseDownNodeInfo.lastPaddingsMap
                         };
                         _instance.do("drag", param);
 
@@ -286,6 +289,8 @@
         function returnToPaddings(paddingsMap) {
           var compounds = cy.nodes(':parent');
           
+          cy.startBatch();
+          
           compounds.each(function(i, ele){
             var paddings = paddingsMap[ele.id()];
             ele.css('padding-left', paddings.left);
@@ -293,6 +298,8 @@
             ele.css('padding-top', paddings.top);
             ele.css('padding-bottom', paddings.bottom);
           });
+          
+          cy.endBatch();
         }
         
         function getTopMostNodes(nodes) {
