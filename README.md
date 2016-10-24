@@ -25,12 +25,15 @@ Register action with its undo function & action name. actionFunction's return va
 Calls registered function with action name actionName via actionFunction(args)
 * `args.firstTime` is reserved. The reason behind is on first call of actionFunction 
 takes a parameter with property `args.firstTime = true` (if args is object or array). After first call, it's set to false.
+In undo/redo actions paddings are preserved. 'args.paddingsToReturn' is reserved in this purpose (Undo/redo actions set this).
+However, if you want to set it specifically for the first time (This is needed if the paddings to return on undo is changed when you call 
+'ur.undo()' and you want to set a previous state of paddings) you can do this and you can use 'ur.getPaddingsMap()' for this.
 
 `ur.undo()`
-Undo last action. Returns arguments that are passed to redo.
+Undo last action. Returns arguments that are passed to redo. Previous paddings are preserved in this action.
 
 `ur.redo()`
-Redo last action. Returns arguments that are passed to undo.
+Redo last action. Returns arguments that are passed to undo. Previous paddings are preserved in this action.
 
 `cy.on("undo", function(actionName, args){} )`
 Calls registered function with action name actionName via actionFunction(args)
@@ -38,6 +41,9 @@ Calls registered function with action name actionName via actionFunction(args)
 `cy.on("redo", function(actionName, args){} )`
 Calls registered function with action name actionName via actionFunction(args)
 *Note that args are returned from opposite action like (undo => redo || redo => undo)
+
+`ur.getPaddingsMap()`
+Get the current paddings of the parent nodes in a specific format used in this extension to use it as the 'args.paddingsToReturn' parameter.
 
 `ur.isUndoStackEmpty()`
 Get whether undo stack is empty (namely is undoable)
@@ -97,6 +103,17 @@ Gets actions (with their args) in redo stack
     var args = {
         options: {}, // layout options
         eles: null // if not null eles.layout will be called.
+        }
+ ```
+
+ `.do("changeParent", args)` http://js.cytoscape.org/#eles.move (Just for the nodes and regards the new positions of the nodes as well)
+
+ ```javascript
+    var args = {
+        parentData: parentData, // It keeps the newParentId (Just an id for each nodes for the first time)
+        nodes: nodes, // Nodes to move the new parent
+        posDiffX: diffX, // How the positions of the nodes will change in 'X' axis after they are moved the new parent 
+        posDiffY: diffY // How the positions of the nodes will change in 'Y' axis after they are moved the new parent 
         }
  ```
  
