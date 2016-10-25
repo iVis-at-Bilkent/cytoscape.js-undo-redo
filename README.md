@@ -25,15 +25,12 @@ Register action with its undo function & action name. actionFunction's return va
 Calls registered function with action name actionName via actionFunction(args)
 * `args.firstTime` is reserved. The reason behind is on first call of actionFunction 
 takes a parameter with property `args.firstTime = true` (if args is object or array). After first call, it's set to false.
-In undo/redo actions paddings are preserved. 'args.paddingsToReturn' is reserved in this purpose (Undo/redo actions set this).
-However, if you want to set it specifically for the first time (This is needed if the paddings to return on undo is changed when you call 
-'ur.undo()' and you want to set a previous state of paddings) you can do this and you can use 'ur.getPaddingsMap()' for this.
 
 `ur.undo()`
-Undo last action. Returns arguments that are passed to redo. Previous paddings are preserved in this action.
+Undo last action. Returns arguments that are passed to redo.
 
 `ur.redo()`
-Redo last action. Returns arguments that are passed to undo. Previous paddings are preserved in this action.
+Redo last action. Returns arguments that are passed to undo.
 
 `cy.on("undo", function(actionName, args){} )`
 Calls registered function with action name actionName via actionFunction(args)
@@ -41,9 +38,6 @@ Calls registered function with action name actionName via actionFunction(args)
 `cy.on("redo", function(actionName, args){} )`
 Calls registered function with action name actionName via actionFunction(args)
 *Note that args are returned from opposite action like (undo => redo || redo => undo)
-
-`ur.getPaddingsMap()`
-Get the current paddings of the parent nodes in a specific format used in this extension to use it as the 'args.paddingsToReturn' parameter.
 
 `ur.isUndoStackEmpty()`
 Get whether undo stack is empty (namely is undoable)
@@ -56,6 +50,9 @@ Gets actions (with their args) in undo stack
 
 `ur.getRedoStack()`
 Gets actions (with their args) in redo stack
+
+`ur.getReset()`
+Resets undo and redo stacks 
 
 
 ## Default Options

@@ -79,8 +79,6 @@
 
         });
 
-        _instance.getPaddingsMap = getPaddingsMap;
-
         //resets undo and redo stacks
         _instance.reset = function()
         {
@@ -95,17 +93,7 @@
                 var action = undoStack.pop();
                 cy.trigger("beforeUndo", [action.name, action.args]);
 
-                // The next paddings map to return back
-                var nextPaddingsToReturn = getPaddingsMap();
-
                 var res = actions[action.name]._undo(action.args);
-
-                // Complete the resulting parameters and return to the given paddings
-                res.paddingsToReturn = nextPaddingsToReturn;
-
-                // Return the paddings given by the param
-                var paddingsToReturn = action.args.paddingsToReturn;
-                returnToPaddings(paddingsToReturn);
 
                 redoStack.push({
                     name: action.name,
@@ -127,32 +115,11 @@
 
                 cy.trigger(action.firstTime ? "beforeDo" : "beforeRedo", [action.name, action.args]);
 
-                // The next paddings map to return back
-                var nextPaddingsToReturn;
-
-                // If this is a do action (That is 'firstTime' is truthy) and paddingsToReturn is not specified by the user
-                // set 'nextPaddingsToReturn'
-                if ( action.firstTime && !action.args.paddingsToReturn ) {
-                    nextPaddingsToReturn = getPaddingsMap();
-                }
-                else {
-                    nextPaddingsToReturn = action.args.paddingsToReturn;
-                }
-
                 if (!action.args)
                   action.args = {};
                 action.args.firstTime = action.firstTime ? true : false;
 
                 var res = actions[action.name]._do(action.args);
-
-                // If this is not a do action return the stored paddings
-                if ( !action.firstTime  ) {
-                    var paddingsToReturn = action.args.paddingsToReturn;
-                    returnToPaddings(paddingsToReturn);
-                }
-
-                // introduce the next paddings to return
-                res.paddingsToReturn = nextPaddingsToReturn;
 
                 undoStack.push({
                     name: action.name,
@@ -230,7 +197,6 @@
                         x: this.position("x"),
                         y: this.position("y")
                     };
-                    lastMouseDownNodeInfo.lastPaddingsMap = getPaddingsMap();
                     lastMouseDownNodeInfo.node = this;
                 }
             });
@@ -262,8 +228,7 @@
 
                         var param = {
                             positionDiff: positionDiff,
-                            nodes: nodes, move: false,
-                            paddingsToReturn: lastMouseDownNodeInfo.lastPaddingsMap
+                            nodes: nodes, move: false
                         };
                         _instance.do("drag", param);
 
@@ -271,42 +236,6 @@
                     }
                 }
             });
-        }
-
-        // Map the paddings of the nodes and return that map
-        function getPaddingsMap() {
-          var paddingsMap = {};
-          var compounds = cy.nodes(':parent');
-
-          compounds.each(function(i, ele){
-            var paddings = {
-              top: ele.css('padding-top'),
-              bottom: ele.css('padding-bottom'),
-              left: ele.css('padding-left'),
-              right: ele.css('padding-right')
-            };
-
-            paddingsMap[ele.id()] = paddings;
-          });
-
-          return paddingsMap;
-        }
-
-        // Return to the paddings in the parameter
-        function returnToPaddings(paddingsMap) {
-          var compounds = cy.nodes(':parent');
-
-          cy.startBatch();
-
-          compounds.each(function(i, ele){
-            var paddings = paddingsMap[ele.id()];
-            ele.css('padding-left', paddings.left);
-            ele.css('padding-right', paddings.right);
-            ele.css('padding-top', paddings.top);
-            ele.css('padding-bottom', paddings.bottom);
-          });
-
-          cy.endBatch();
         }
 
         function getTopMostNodes(nodes) {
