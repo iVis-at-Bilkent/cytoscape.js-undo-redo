@@ -485,7 +485,7 @@
                               cy.layout(args.options);
                             return nodesData;
                         } else
-                            return returnToPositionsAndSizes(args.options);
+                            return returnToPositionsAndSizes(args);
                     },
                     _undo: function (nodesData) {
                         return returnToPositionsAndSizes(nodesData);
