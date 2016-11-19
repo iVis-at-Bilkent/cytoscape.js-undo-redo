@@ -51,7 +51,7 @@ Gets actions (with their args) in undo stack
 `ur.getRedoStack()`
 Gets actions (with their args) in redo stack
 
-`ur.getReset()`
+`ur.reset()`
 Resets undo and redo stacks 
 
 
