@@ -146,6 +146,22 @@
 
             return this.redo();
         };
+        
+        // Undo all actions in undo stack
+        _instance.undoAll = function() {
+            
+            while( !this.isUndoStackEmpty() ) {
+                this.undo();
+            }
+        };
+        
+        // Redo all actions in redo stack
+        _instance.redoAll = function() {
+            
+            while( !this.isRedoStackEmpty() ) {
+                this.redo();
+            }
+        };
 
         // Register action with its undo function & action name.
         _instance.action = function (actionName, _do, _undo) {

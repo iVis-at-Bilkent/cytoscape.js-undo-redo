@@ -32,6 +32,12 @@ Undo last action. Returns arguments that are passed to redo.
 `ur.redo()`
 Redo last action. Returns arguments that are passed to undo.
 
+`ur.undoAll()`
+Undo all actions in undo stack.
+
+`ur.redoAll()`
+Redo all actions in redo stack.
+
 `cy.on("undo", function(actionName, args){} )`
 Calls registered function with action name actionName via actionFunction(args)
 
