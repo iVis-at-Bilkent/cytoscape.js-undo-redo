@@ -18,6 +18,7 @@
                 isDebug: false, // Debug mode for console messages
                 actions: {},// actions to be added
                 undoableDrag: true, // Whether dragging nodes are undoable can be a function as well
+                stackSizeLimit: undefined, // Size limit of undo stack, note that the size of redo stack cannot exceed size of undo stack
                 beforeUndo: function () { // callback before undo is triggered.
 
                 },
@@ -125,6 +126,10 @@
                     name: action.name,
                     args: res
                 });
+                
+                if (_instance.options.stackSizeLimit != undefined && undoStack.length > _instance.options.stackSizeLimit ) {
+                  undoStack.shift();
+                }
 
                 cy.trigger(action.firstTime ? "afterDo" : "afterRedo", [action.name, action.args]);
                 return res;
