@@ -302,40 +302,34 @@
         }
 
 
-        function returnToPositionsAndSizes(nodesData) {
-            var currentPositionsAndSizes = {};
+        function returnToPositions(positions) {
+            var currentPositions = {};
             cy.nodes().positions(function (i, ele) {
-                currentPositionsAndSizes[ele.id()] = {
-                    width: ele.width(),
-                    height: ele.height(),
+                currentPositions[ele.id()] = {
                     x: ele.position("x"),
                     y: ele.position("y")
                 };
-                var data = nodesData[ele.id()];
-                ele._private.data.width = data.width;
-                ele._private.data.height = data.height;
+                var pos = positions[ele.id()];
                 return {
-                    x: data.x,
-                    y: data.y
+                    x: pos.x,
+                    y: pos.y
                 };
             });
 
-            return currentPositionsAndSizes;
+            return currentPositions;
         }
 
-        function getNodesData() {
-            var nodesData = {};
+        function getNodePositions() {
+            var positions = {};
             var nodes = cy.nodes();
             for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
-                nodesData[node.id()] = {
-                    width: node.width(),
-                    height: node.height(),
+                positions[node.id()] = {
                     x: node.position("x"),
                     y: node.position("y")
                 };
             }
-            return nodesData;
+            return positions;
         }
 
         function changeParent(param) {
@@ -499,17 +493,17 @@
                 "layout": {
                     _do: function (args) {
                         if (args.firstTime){
-                            var nodesData = getNodesData();
+                            var positions = getNodePositions();
                             if(args.eles)
                                 getEles(args.eles).layout(args.options);
                             else
                               cy.layout(args.options);
-                            return nodesData;
+                            return positions;
                         } else
-                            return returnToPositionsAndSizes(args);
+                            return returnToPositions(args);
                     },
                     _undo: function (nodesData) {
-                        return returnToPositionsAndSizes(nodesData);
+                        return returnToPositions(nodesData);
                     }
                 },
                 "changeParent": {
