@@ -101,7 +101,7 @@
                     args: res
                 });
 
-                cy.trigger("afterUndo", [action.name, action.args]);
+                cy.trigger("afterUndo", [action.name, action.args, res]);
                 return res;
             } else if (_instance.options.isDebug) {
                 console.log("Undoing cannot be done because undo stack is empty!");
@@ -131,7 +131,7 @@
                   undoStack.shift();
                 }
 
-                cy.trigger(action.firstTime ? "afterDo" : "afterRedo", [action.name, action.args]);
+                cy.trigger(action.firstTime ? "afterDo" : "afterRedo", [action.name, action.args, res]);
                 return res;
             } else if (_instance.options.isDebug) {
                 console.log("Redoing cannot be done because redo stack is empty!");

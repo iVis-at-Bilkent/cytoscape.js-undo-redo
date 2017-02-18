@@ -79,17 +79,22 @@ Resets undo and redo stacks
 
 ## Events
 
+Parameters:<br>
+actionName: Name of the action.<br>
+args: Arguments passed to the action.<br>
+res: The value returned when the function is executed. This value is to be passed to redo function in afterUndo case and it will be passed to undo function in afterDo/afterRedo cases.<br>
+
  `.on("beforeUndo", function(event, actionName, args){ })` 
  
- `.on("afterUndo", function(event, actionName, args){ })` 
+ `.on("afterUndo", function(event, actionName, args, res){ })` 
  
  `.on("beforeRedo", function(event, actionName, args){ })` 
  
- `.on("afterRedo", function(event, actionName, args){ })` 
+ `.on("afterRedo", function(event, actionName, args, res){ })` 
  
  `.on("beforeDo", function(event, actionName, args){ })` 
  
- `.on("afterDo", function(event, actionName, args){ })` 
+ `.on("afterDo", function(event, actionName, args, res){ })` 
  
 
 
