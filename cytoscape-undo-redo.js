@@ -151,7 +151,7 @@
 
             return this.redo();
         };
-        
+
         // Undo all actions in undo stack
         _instance.undoAll = function() {
             
@@ -394,6 +394,32 @@
           return result;
         }
 
+        // function registered in the defaultActions below
+        // to be used like .do('batch', actionList)
+        // allows to apply any quantity of registered action in one go
+        // the whole batch can be undone/redone with one key press
+        function batch (actionList) {
+            var tempStack = []; // corresponds to the results of every action queued in actionList
+
+            // here we need to check in advance if all the actions provided really correspond to available functions
+            // if one of the action cannot be executed, the whole batch is corrupted because we can't go back after
+            for (var i = 0; i < actionList.length; i++) {
+                var action = actionList[i];
+                if (!actions.hasOwnProperty(action.name)){
+                    throw "Action " + action.name + " does not exist as an undoable function";
+                }
+            }
+
+            for (var i = 0; i < actionList.length; i++) {
+                var action = actionList[i];
+                // directly execute the action, bypass the whole do/redo process
+                var actionResult = actions[action.name]._do(action.param);
+                tempStack.unshift({name: action.name, param: actionResult});
+            }
+
+            return tempStack;
+        };
+
         // Default actions
         function defaultActions() {
             return {
@@ -513,6 +539,10 @@
                     _undo: function (args) {
                         return changeParent(args);
                     }
+                },
+                "batch": {
+                    _do: batch,
+                    _undo: batch
                 }
             };
         }
