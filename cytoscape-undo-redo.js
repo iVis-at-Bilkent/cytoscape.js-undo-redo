@@ -398,23 +398,35 @@
         // to be used like .do('batch', actionList)
         // allows to apply any quantity of registered action in one go
         // the whole batch can be undone/redone with one key press
-        function batch (actionList) {
+        function batch (actionList, doOrUndo) {
             var tempStack = []; // corresponds to the results of every action queued in actionList
 
             // here we need to check in advance if all the actions provided really correspond to available functions
             // if one of the action cannot be executed, the whole batch is corrupted because we can't go back after
             for (var i = 0; i < actionList.length; i++) {
                 var action = actionList[i];
-                if (!actions.hasOwnProperty(action.name)){
+                if (!actions.hasOwnProperty(action.name)) {
                     throw "Action " + action.name + " does not exist as an undoable function";
                 }
             }
 
             for (var i = 0; i < actionList.length; i++) {
                 var action = actionList[i];
-                // directly execute the action, bypass the whole do/redo process
-                var actionResult = actions[action.name]._do(action.param);
-                tempStack.unshift({name: action.name, param: actionResult});
+                // firstTime property is automatically injected into actionList by the do() function
+                // we use that to pass it down to the actions in the batch
+                action.param.firstTime = actionList.firstTime;
+                var actionResult;
+                if (doOrUndo == "undo") {
+                    actionResult = actions[action.name]._undo(action.param);
+                }
+                else {
+                    actionResult = actions[action.name]._do(action.param);
+                }
+
+                tempStack.unshift({
+                    name: action.name,
+                    param: actionResult
+                });
             }
 
             return tempStack;
@@ -541,8 +553,12 @@
                     }
                 },
                 "batch": {
-                    _do: batch,
-                    _undo: batch
+                    _do: function (args) {
+                        return batch(args, "do");
+                    },
+                    _undo: function (args) {
+                        return batch(args, "undo");
+                    }
                 }
             };
         }
