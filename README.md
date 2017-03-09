@@ -144,12 +144,12 @@ res: The value returned when the function is executed. This value is to be passe
         location: ... // as is in docs
         }
  ```
-
+ 
  * The `batch` action can execute several actions at the same time. Those actions can then be undone as a whole.
-
-`.do("batch", actionList)`
-
-````javascript
+ 
+ `.do("batch", actionList)`
+ 
+ ````javascript
     var actionList = [{
 	name: ..., // name of the action
 	param: ... // object containing the parameters as you would pass them to said action
@@ -157,7 +157,7 @@ res: The value returned when the function is executed. This value is to be passe
 	{...}, // a second action to be executed
 	...
     ]
-```
+ ```
 
 ## Example
  ```javascript
