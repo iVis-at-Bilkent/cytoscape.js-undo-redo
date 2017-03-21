@@ -342,7 +342,8 @@
             var newParentId = param.parentData == undefined ? null : param.parentData;
             // These eles includes the nodes and their connected edges and will be removed in nodes.move().
             // They should be restored in undo
-            result.elesToRestore = param.nodes.union(param.nodes.connectedEdges());
+            var withDescendant = param.nodes.union(param.nodes.descendants());
+            result.elesToRestore = withDescendant.union(withDescendant.connectedEdges());
             // These are the eles created by nodes.move(), they should be removed in undo.
             result.movedEles = param.nodes.move({"parent": newParentId});
             
