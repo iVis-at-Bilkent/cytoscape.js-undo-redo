@@ -336,60 +336,27 @@
           var result = {
           };
 
-          var nodes = param.nodes;
-
-          var transferedNodeMap = {};
-
-          // Map the nodes included in the original node list
-          for (var i = 0; i < param.nodes.length; i++) {
-            var node = param.nodes[i];
-            transferedNodeMap[node.id()] = true;
-          }
-
-          if (!param.firstTime) {
-            // If it is not the first time get the updated nodes
-            nodes = cy.nodes().filter(function (i, ele) {
-              return (transferedNodeMap[ele.id()]);
-            });
-          }
-
-          result.posDiffX = -1 * param.posDiffX;
-          result.posDiffY = -1 * param.posDiffY;
-
-          result.parentData = {}; // For undo / redo cases it keeps the previous parent info per node
-
-          // Fill parent data
-          for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
-            result.parentData[node.id()] = node.data('parent');
-          }
-
-          var newParentId;
-
+          // If this is first time we should move the node to its new parent and relocate it by given posDiff params
+          // else we should remove the moved eles and restore the eles to restore 
           if (param.firstTime) {
-            newParentId = param.parentData == undefined ? null : param.parentData;
-            nodes.move({"parent": newParentId});
+            var newParentId = param.parentData == undefined ? null : param.parentData;
+            // These eles includes the nodes and their connected edges and will be removed in nodes.move().
+            // They should be restored in undo
+            result.elesToRestore = param.nodes.union(param.nodes.connectedEdges());
+            // These are the eles created by nodes.move(), they should be removed in undo.
+            result.movedEles = param.nodes.move({"parent": newParentId});
+            
+            var posDiff = {
+              x: param.posDiffX,
+              y: param.posDiffY
+            };
+
+            moveNodes(posDiff, result.movedEles);
           }
           else {
-            for (var i = 0; i < nodes.length; i++) {
-              var node = nodes[i];
-
-              newParentId = param.parentData[node.id()] == undefined ? null : param.parentData[node.id()];
-              node.move({"parent": newParentId});
-            }
+            result.elesToRestore = param.movedEles.remove();
+            result.movedEles = param.elesToRestore.restore();
           }
-
-          var posDiff = {
-            x: param.posDiffX,
-            y: param.posDiffY
-          };
-
-          // We should get the updated nodes to move them
-          result.nodes = cy.nodes().filter(function (i, ele) {
-            return (transferedNodeMap[ele.id()]);
-          });
-
-          moveNodes(posDiff, result.nodes);
 
           return result;
         }
