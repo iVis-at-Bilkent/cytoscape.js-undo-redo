@@ -507,10 +507,19 @@
                     _do: function (args) {
                         if (args.firstTime){
                             var positions = getNodePositions();
-                            if(args.eles)
-                                getEles(args.eles).layout(args.options);
-                            else
-                              cy.layout(args.options);
+                            var layout;
+                            if(args.eles) {
+                              layout = getEles(args.eles).layout(args.options);
+                            }
+                            else {
+                              layout = cy.layout(args.options);
+                            }
+                            
+                            // Do this check for cytoscape.js backward compatibility
+                            if (layout && layout.run) {
+                              layout.run();
+                            }
+                            
                             return positions;
                         } else
                             return returnToPositions(args);
