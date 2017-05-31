@@ -121,8 +121,9 @@ res: The value returned when the function is executed. This value is to be passe
     var args = {
         parentData: parentData, // It keeps the newParentId (Just an id for each nodes for the first time)
         nodes: nodes, // Nodes to move the new parent
-        posDiffX: diffX, // How the positions of the nodes will change in 'X' axis after they are moved the new parent 
-        posDiffY: diffY // How the positions of the nodes will change in 'Y' axis after they are moved the new parent 
+        posDiffX: diffX, // How the positions of the nodes will change in 'X' axis after they are moved the new parent
+        posDiffY: diffY, // How the positions of the nodes will change in 'Y' axis after they are moved the new parent
+        callback: function(eles) {} // optional - a function to be called after the change has occured, on the newly created elements
         }
  ```
  
@@ -149,7 +150,7 @@ res: The value returned when the function is executed. This value is to be passe
  
  `.do("batch", actionList)`
  
- ````javascript
+ ```javascript
     var actionList = [{
 	name: ..., // name of the action
 	param: ... // object containing the parameters as you would pass them to said action

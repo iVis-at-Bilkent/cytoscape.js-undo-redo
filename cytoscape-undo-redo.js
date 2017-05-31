@@ -342,7 +342,6 @@
         function changeParent(param) {
           var result = {
           };
-
           // If this is first time we should move the node to its new parent and relocate it by given posDiff params
           // else we should remove the moved eles and restore the eles to restore 
           if (param.firstTime) {
@@ -364,6 +363,11 @@
           else {
             result.elesToRestore = param.movedEles.remove();
             result.movedEles = param.elesToRestore.restore();
+          }
+
+          if (param.callback) {
+            result.callback = param.callback; // keep the provided callback so it can be reused after undo/redo
+            param.callback(result.movedEles); // apply the callback on newly created elements
           }
 
           return result;
