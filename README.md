@@ -4,6 +4,10 @@ cytoscape.js-undo-redo
 ## Description
  A Cytsocape.js extension to control actions on Cytoscape.js graph, also providing built-in functionalities for common Cytoscape.js operations like dragging nodes, adding/removing nodes, etc. distributed under [The MIT License](https://opensource.org/licenses/MIT).
  
+## Demo
+
+Click [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-undo-redo/master/demo.html) for demo 
+ 
 ## API
 
 ```javascript
