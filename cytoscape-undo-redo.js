@@ -402,6 +402,8 @@
             // the whole batch can be undone/redone with one key press
             function batch (actionList, doOrUndo) {
                 var tempStack = []; // corresponds to the results of every action queued in actionList
+                var instance = getScratch(cy, 'instance'); // get extension instance through cy
+                var actions = instance.actions;
 
                 // here we need to check in advance if all the actions provided really correspond to available functions
                 // if one of the action cannot be executed, the whole batch is corrupted because we can't go back after
