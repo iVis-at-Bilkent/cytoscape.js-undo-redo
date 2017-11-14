@@ -81,10 +81,10 @@
         });
 
         //resets undo and redo stacks
-        _instance.reset = function()
+        _instance.reset = function(undos, redos)
         {
-            undoStack = [];
-            redoStack = [];
+            undoStack = undos || [];
+            redoStack = redos || [];
         }
 
         // Undo last action
