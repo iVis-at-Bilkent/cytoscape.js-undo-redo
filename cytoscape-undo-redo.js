@@ -142,7 +142,7 @@
         // Calls registered function with action name actionName via actionFunction(args)
         _instance.do = function (actionName, args) {
 
-            redoStack = [];
+            redoStack.length = 0;
             redoStack.push({
                 name: actionName,
                 args: args,
