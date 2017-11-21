@@ -61,8 +61,8 @@ Gets actions (with their args) in undo stack
 `ur.getRedoStack()`
 Gets actions (with their args) in redo stack
 
-`ur.reset()`
-Resets undo and redo stacks 
+`ur.reset(undos, redos)`
+If arguments are provided, overrides undo and redo stacks. Otherwise, undo and redo stacks are cleared.
 
 
 ## Default Options
