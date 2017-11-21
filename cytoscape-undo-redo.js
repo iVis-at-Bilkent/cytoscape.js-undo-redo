@@ -81,10 +81,10 @@
         });
 
         //resets undo and redo stacks
-        _instance.reset = function()
+        _instance.reset = function(undos, redos)
         {
-            undoStack = [];
-            redoStack = [];
+            undoStack = undos || [];
+            redoStack = redos || [];
         }
 
         // Undo last action
@@ -142,7 +142,7 @@
         // Calls registered function with action name actionName via actionFunction(args)
         _instance.do = function (actionName, args) {
 
-            redoStack = [];
+            redoStack.length = 0;
             redoStack.push({
                 name: actionName,
                 args: args,
