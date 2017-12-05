@@ -63,10 +63,10 @@
           instance.redoStack = [];
 
           //resets undo and redo stacks
-          instance.reset = function()
+          instance.reset = function(undos, redos)
           {
-              this.undoStack = [];
-              this.redoStack = [];
+              this.undoStack = undos || [];
+              this.redoStack = undos || [];
           }
 
           // Undo last action
@@ -124,7 +124,7 @@
           // Calls registered function with action name actionName via actionFunction(args)
           instance.do = function (actionName, args) {
 
-              this.redoStack = [];
+              this.redoStack.length = 0;
               this.redoStack.push({
                   name: actionName,
                   args: args,
