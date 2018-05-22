@@ -310,10 +310,14 @@
                     var node = topMostNodes[i];
                     var oldX = node.position("x");
                     var oldY = node.position("y");
-                    node.position({
-                        x: oldX + positionDiff.x,
-                        y: oldY + positionDiff.y
-                    });
+                    //Only simple nodes are moved since the movement of compounds caused the position to be moved twice
+                    if (!node.isParent())
+                    {
+                        node.position({
+                            x: oldX + positionDiff.x,
+                            y: oldY + positionDiff.y
+                        });
+                    }
                     var children = node.children();
                     moveNodes(positionDiff, children, true);
                 }
