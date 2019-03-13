@@ -1,4 +1,4 @@
-cytoscape.js-undo-redo
+cytoscape-undo-redo
 ================================================================================
 
 ## Description
@@ -192,8 +192,8 @@ res: The value returned when the function is executed. This value is to be passe
 ## Usage instructions
 
 Download the library:
- * via npm: `npm install cytoscape.js-undo-redo`,
- * via bower: `bower install cytoscape.js-undo-redo`, or
+ * via npm: `npm install cytoscape-undo-redo`,
+ * via bower: `bower install cytoscape-undo-redo`, or
  * via direct download in the repository (probably from a tag).
 
 `require()` the library as appropriate for your project:
@@ -208,7 +208,7 @@ undoRedo( cytoscape ); // register extension
 
 AMD:
 ```js
-require(['cytoscape', 'cytoscape.js-undo-redo'], function( cytoscape, undoRedo ){
+require(['cytoscape', 'cytoscape-undo-redo'], function( cytoscape, undoRedo ){
   undoRedo( cytoscape ); // register extension
 });
 ```
@@ -223,7 +223,7 @@ This project is set up to automatically be published to npm and bower.  To publi
 
 1. Set the version number environment variable: `export VERSION=1.2.3`
 1. Publish: `gulp publish`
-1. If publishing to bower for the first time, you'll need to run `bower register cytoscape.js-undo-redo https://github.com/iVis-at-Bilkent/cytoscape.js-undo-redo.git`
+1. If publishing to bower for the first time, you'll need to run `bower register cytoscape-undo-redo https://github.com/iVis-at-Bilkent/cytoscape.js-undo-redo.git`
 
 ## Team
 
