@@ -66,7 +66,7 @@
           instance.reset = function(undos, redos)
           {
               this.undoStack = undos || [];
-              this.redoStack = undos || [];
+              this.redoStack = redos || [];
           }
 
           // Undo last action
