@@ -410,14 +410,21 @@
                 // These eles includes the nodes and their connected edges and will be removed in nodes.move().
                 // They should be restored in undo
                 var withDescendant = param.nodes.union(param.nodes.descendants());
-                var parentData = {};
+                var parentData = {};                
                 withDescendant.forEach(function(ele){
                   if(ele.parent().id())
                     parentData[ele.id()] = ele.parent(); 
                   else
                     parentData[ele.id()] = null;
                 });
+                var positionData = {};
+                withDescendant.forEach(function(ele){
+                  positionData[ele.id()] = {};
+                  positionData[ele.id()].x = ele.position('x');
+                  positionData[ele.id()].y = ele.position('y');
+                });                
                 result.oldParent = parentData;
+                result.oldPosition = positionData;
                 result.newParent = newParentId;
                 result.movedEles = withDescendant;
                 param.nodes.move({"parent": newParentId}).nodes();
@@ -436,6 +443,12 @@
                   else
                     result.oldParent[ele.id()] = null;
                 });
+                result.oldPosition = {};
+                param.movedEles.forEach(function(ele){
+                  result.oldPosition[ele.id()] = {};
+                  result.oldPosition[ele.id()].x = ele.position("x");
+                  result.oldPosition[ele.id()].y = ele.position("y");
+                });                
                 result.newParent = param.oldParent;
                 result.movedEles = param.movedEles;
                 result.movedEles.forEach(function(ele){
@@ -445,6 +458,8 @@
                     ele.move({'parent': null});
                   else
                     ele.move({'parent': result.newParent[ele.id()].id()});
+                  
+                  ele.position(param.oldPosition[ele.id()]);
                 });
               }
 
