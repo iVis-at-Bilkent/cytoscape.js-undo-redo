@@ -30,5 +30,8 @@
     "gulp-shell": "^0.2.9",
     "jshint-stylish": "^1.0.0",
     "run-sequence": "^1.2.1"
-  }
+  },
+  "peerDependencies": {
+    "cytoscape": "^3.3.0"
+  }  
 }

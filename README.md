@@ -185,7 +185,7 @@ res: The value returned when the function is executed. This value is to be passe
 
 ## Dependencies
 
- * Cytoscape.js ^1.5.0
+ * Cytoscape.js ^3.3.0
  
  
 
