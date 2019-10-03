@@ -66,7 +66,7 @@
           instance.reset = function(undos, redos)
           {
               this.undoStack = undos || [];
-              this.redoStack = undos || [];
+              this.redoStack = redos || [];
           }
 
           // Undo last action
@@ -334,7 +334,7 @@
 
             function returnToPositions(positions) {
                 var currentPositions = {};
-                cy.nodes().positions(function (ele, i) {
+                cy.nodes().not(":parent").positions(function (ele, i) {
                     if(typeof ele === "number") {
                       ele = i;
                     }
@@ -366,7 +366,7 @@
                 return positions;
             }
 
-            function changeParent(param) {
+            function changeParentOld(param) {
               var result = {
               };
               // If this is first time we should move the node to its new parent and relocate it by given posDiff params
@@ -399,6 +399,77 @@
 
               return result;
             }
+            
+            function changeParentNew(param) {
+              var result = {
+              };
+              // If this is first time we should move the node to its new parent and relocate it by given posDiff params
+              // else we should remove the moved eles and restore the eles to restore
+              if (param.firstTime) {
+                var newParentId = param.parentData == undefined ? null : param.parentData;
+                // These eles includes the nodes and their connected edges and will be removed in nodes.move().
+                // They should be restored in undo
+                var withDescendant = param.nodes.union(param.nodes.descendants());
+                var parentData = {};                
+                withDescendant.forEach(function(ele){
+                  if(ele.parent().id())
+                    parentData[ele.id()] = ele.parent(); 
+                  else
+                    parentData[ele.id()] = null;
+                });
+                var positionData = {};
+                withDescendant.forEach(function(ele){
+                  positionData[ele.id()] = {};
+                  positionData[ele.id()].x = ele.position('x');
+                  positionData[ele.id()].y = ele.position('y');
+                });                
+                result.oldParent = parentData;
+                result.oldPosition = positionData;
+                result.newParent = newParentId;
+                result.movedEles = withDescendant;
+                param.nodes.move({"parent": newParentId}).nodes();
+                var posDiff = {
+                  x: param.posDiffX,
+                  y: param.posDiffY
+                };
+
+                moveNodes(posDiff, result.movedEles);
+              }
+              else {
+                result.oldParent = {};
+                param.movedEles.forEach(function(ele){
+                  if(ele.parent().id())
+                    result.oldParent[ele.id()] = ele.parent(); 
+                  else
+                    result.oldParent[ele.id()] = null;
+                });
+                result.oldPosition = {};
+                param.movedEles.forEach(function(ele){
+                  result.oldPosition[ele.id()] = {};
+                  result.oldPosition[ele.id()].x = ele.position("x");
+                  result.oldPosition[ele.id()].y = ele.position("y");
+                });                
+                result.newParent = param.oldParent;
+                result.movedEles = param.movedEles;
+                result.movedEles.forEach(function(ele){
+                  if(typeof result.newParent !== 'object')
+                    ele.move({'parent': result.newParent});
+                  else if(result.newParent[ele.id()] == null)
+                    ele.move({'parent': null});
+                  else
+                    ele.move({'parent': result.newParent[ele.id()].id()});
+                  
+                  ele.position(param.oldPosition[ele.id()]);
+                });
+              }
+
+              if (param.callback) {
+                result.callback = param.callback; // keep the provided callback so it can be reused after undo/redo
+                param.callback(result.movedEles); // apply the callback on newly created elements
+              }
+
+              return result;
+            }         
 
             // function registered in the defaultActions below
             // to be used like .do('batch', actionList)
@@ -560,11 +631,11 @@
                     }
                 },
                 "changeParent": {
-                    _do: function (args) {
-                        return changeParent(args);
+                    _do: function (args) {                     
+                        return (cy.nodes()[0].component ? changeParentNew(args) : changeParentOld(args));
                     },
                     _undo: function (args) {
-                        return changeParent(args);
+                        return (cy.nodes()[0].component ? changeParentNew(args) : changeParentOld(args));
                     }
                 },
                 "batch": {
