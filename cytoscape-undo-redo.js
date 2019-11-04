@@ -547,11 +547,24 @@
                         var eles = getEles(args.eles);
                         var nodes = eles.nodes();
                         var edges = eles.edges();
-
+                        
+                        var oldNodesParents = [];
+                        var oldEdgesSources = [];
+                        var oldEdgesTargets = [];
+                        
+                        nodes.forEach(function(node){
+                          oldNodesParents.push(node.parent().length > 1 ? node.parent().id() : null);
+                        });
+                        edges.forEach(function(edge){
+                          oldEdgesSources.push(edge.source().id());
+                          oldEdgesTargets.push(edge.target().id());
+                        })
+                        
                         return {
-                            oldNodes: nodes,
+                            oldNodesParents: oldNodesParents,
                             newNodes: nodes.move(args.location),
-                            oldEdges: edges,
+                            oldEdgesSources: oldEdgesSources,
+                            oldEdgesTargets: oldEdgesTargets,
                             newEdges: edges.move(args.location)
                         };
                     },
@@ -559,24 +572,24 @@
                         var newEles = cy.collection();
                         var location = {};
                         if (eles.newNodes.length > 0) {
-                            location.parent = eles.newNodes[0].parent();
+                            location.parent = eles.newNodes[0].parent().id();
 
                             for (var i = 0; i < eles.newNodes.length; i++) {
                                 var newNode = eles.newNodes[i].move({
-                                    parent: eles.oldNodes[i].parent()
+                                    parent: eles.oldNodesParents[i]
                                 });
-                                newEles.union(newNode);
+                                newEles = newEles.union(newNode);
                             }
                         } else {
-                            location.source = location.newEdges[0].source();
-                            location.target = location.newEdges[0].target();
+                            location.source = eles.newEdges[0].source().id();
+                            location.target = eles.newEdges[0].target().id();
 
                             for (var i = 0; i < eles.newEdges.length; i++) {
                                 var newEdge = eles.newEdges[i].move({
-                                    source: eles.oldEdges[i].source(),
-                                    target: eles.oldEdges[i].target()
+                                    source: eles.oldEdgesSources[i],
+                                    target: eles.oldEdgesTargets[i]
                                 });
-                                newEles.union(newEdge);
+                                newEles = newEles.union(newEdge);
                             }
                         }
                         return {
