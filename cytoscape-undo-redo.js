@@ -587,8 +587,11 @@
                 },
                 "drag": {
                     _do: function (args) {
-                        if (args.move)
+                        if (args.move){
                             moveNodes(args.positionDiff, args.nodes);
+                            cy.elements().unselect();
+                        }
+                           
                         return args;
                     },
                     _undo: function (args) {
@@ -602,6 +605,7 @@
                             move: true
                         };
                         moveNodes(diff, args.nodes);
+                        cy.elements().unselect();
                         return result;
                     }
                 },
