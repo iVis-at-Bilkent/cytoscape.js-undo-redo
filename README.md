@@ -10,7 +10,7 @@ U. Dogrusoz , A. Karacelik, I. Safarli, H. Balci, L. Dervishi, and M.C. Siper, "
 
 ## Demo
 
-Click [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-undo-redo/master/demo.html) for demo 
+Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-undo-redo/master/demo.html) for demo 
  
 ## API
 
